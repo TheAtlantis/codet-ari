@@ -100,7 +100,7 @@ class Client(object):
                 except Exception as e:
                     self.exception_handler(e)
 
-    def run(self, apps):
+    def run(self, apps, subscribeAll="false"):
         """Connect to the WebSocket and begin processing messages.
 
         This method will block until all messages have been received from the
@@ -108,10 +108,12 @@ class Client(object):
 
         :param apps: Application (or list of applications) to connect for
         :type  apps: str or list of str
+        :param subscribeAll: Subscribe to all Asterisk events. If provided, the applications listed will be subscribed to all events, effectively disabling the application specific subscriptions. Default is 'false'.
+        :type  subscribeAll: boolean
         """
         if isinstance(apps, list):
             apps = ','.join(apps)
-        ws = self.swagger.events.eventWebsocket(app=apps)
+        ws = self.swagger.events.eventWebsocket(app=apps, subscribeAll=subscribeAll))
         self.websockets.add(ws)
         try:
             self.__run(ws)
